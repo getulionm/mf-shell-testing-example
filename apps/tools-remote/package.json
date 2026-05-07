@@ -1,0 +1,7 @@
+{
+  "name": "@mf/tools-remote",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Tools microfrontend remote",
+  "main": "src/index.ts"
+}

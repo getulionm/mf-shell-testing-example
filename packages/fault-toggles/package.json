@@ -1,0 +1,7 @@
+{
+  "name": "@mf/fault-toggles",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Deterministic fault injection for tests",
+  "main": "src/index.ts"
+}

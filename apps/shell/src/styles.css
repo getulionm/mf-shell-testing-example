@@ -1,0 +1,173 @@
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  color: #222;
+  background: #f7f8fb;
+}
+
+.shell-boundary {
+  position: relative;
+  min-height: 100vh;
+  outline: 3px solid #2f6fed;
+  outline-offset: -3px;
+  background: #fff;
+}
+
+.shell-boundary::before {
+  content: "Host Under Test";
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  z-index: 20;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #0f2a66;
+  background: #dce8ff;
+  border: 1px solid #b6cbff;
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.shell-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  border-bottom: 1px solid #ccc;
+  background: #fafafa;
+}
+
+.shell-title {
+  font-weight: 700;
+}
+
+.shell-spacer {
+  flex: 1;
+}
+
+.layout {
+  display: flex;
+  min-height: calc(100vh - 56px);
+}
+
+.side-nav {
+  width: 300px;
+  border-right: 1px solid #e5e5e5;
+  padding: 14px;
+}
+
+.nav-hint {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #5a6170;
+}
+
+.topology-panel {
+  margin-top: 14px;
+  border: 1px solid #cfd7ea;
+  border-radius: 8px;
+  background: #f8faff;
+  padding: 10px;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.topology-panel h2 {
+  margin: 0 0 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #253561;
+}
+
+.topology-panel p {
+  margin: 4px 0;
+}
+
+.main {
+  flex: 1;
+  padding: 16px 20px;
+}
+
+.remote-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.remote-slot {
+  border: 2px dashed #9da3ae;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fcfcff;
+  min-height: 260px;
+}
+
+.remote-slot-title {
+  margin: 0 0 10px;
+  font-size: 14px;
+}
+
+.remote-slot-tools {
+  border-color: #8a58d6;
+  background: #faf6ff;
+}
+
+.remote-slot-records {
+  border-color: #1f9d63;
+  background: #f5fff8;
+}
+
+.remote-boundary {
+  border: 2px solid currentColor;
+  border-radius: 8px;
+  padding: 12px 14px;
+  position: relative;
+}
+
+.remote-boundary::before {
+  position: absolute;
+  top: -11px;
+  left: 10px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: #fff;
+  padding: 0 6px;
+}
+
+.remote-boundary-records {
+  color: #127a4c;
+}
+
+.remote-boundary-records::before {
+  content: "Task Summary Microfrontend";
+}
+
+.remote-boundary-tools {
+  color: #6b3dc8;
+}
+
+.remote-boundary-tools::before {
+  content: "Task Creator Microfrontend";
+}
+
+.status {
+  margin: 0 0 12px;
+  font-size: 13px;
+}
+
+.status.error {
+  color: #8b1d1d;
+}
+
+.module-unavailable {
+  border: 1px solid #edb2b2;
+  background: #fff4f4;
+  border-radius: 8px;
+  padding: 12px;
+  max-width: 700px;
+}

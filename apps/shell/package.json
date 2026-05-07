@@ -1,0 +1,7 @@
+{
+  "name": "@mf/shell",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shell host app",
+  "main": "src/index.ts"
+}

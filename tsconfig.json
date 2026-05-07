@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "esnext",
+    "lib": ["ES2020", "DOM"],
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "types": ["node", "vitest/globals"],
+    "ignoreDeprecations": "6.0"
+  },
+  "include": ["apps/**/*.ts", "packages/**/*.ts", "tests/**/*.ts", "*.ts"]
+}
