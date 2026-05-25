@@ -3,3 +3,14 @@ dist/
 playwright-report/
 test-results/
 .DS_Store
+
+# Secrets and local env files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+.npmrc
