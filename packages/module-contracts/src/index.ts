@@ -12,6 +12,19 @@ function isObject(value: unknown) {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
 
+function isBrokeredTask(value: unknown) {
+  return (
+    isObject(value) &&
+    typeof value.title === "string" &&
+    value.title.trim().length > 0 &&
+    (value.status === "created" || value.status === "done")
+  );
+}
+
+function isBrokeredTaskList(value: unknown) {
+  return Array.isArray(value) && value.every(isBrokeredTask);
+}
+
 export function validateRemoteManifest(manifest: any) {
   const errors: string[] = [];
   if (!isObject(manifest)) {
@@ -59,11 +72,12 @@ export function validateEventPayload(type: string, payload: any) {
     type === EVENT_TYPES.TASK_STATS_UPDATED &&
     (typeof payload.total !== "number" ||
       typeof payload.open !== "number" ||
-      typeof payload.done !== "number")
+      typeof payload.done !== "number" ||
+      !isBrokeredTaskList(payload.tasks))
   ) {
     return {
       valid: false,
-      error: "TaskStatsUpdated requires payload.total, payload.open, and payload.done",
+      error: "TaskStatsUpdated requires payload.total, payload.open, payload.done, and payload.tasks",
     };
   }
 
@@ -84,9 +98,24 @@ export function createEventBus(onTelemetry?: (event: any) => void) {
   function publish(type: string, payload: any, source?: string) {
     const payloadValidation = validateEventPayload(type, payload);
     if (!payloadValidation.valid) {
+      const rejection = {
+        status: "rejected" as const,
+        type,
+        payload,
+        source: source || "unknown",
+        error: payloadValidation.error,
+        at: Date.now(),
+      };
+      onTelemetry?.(rejection);
       throw new Error(payloadValidation.error);
     }
-    const event = { type, payload, source: source || "unknown", at: Date.now() };
+    const event = {
+      status: "published" as const,
+      type,
+      payload,
+      source: source || "unknown",
+      at: Date.now(),
+    };
     onTelemetry?.(event);
     for (const handler of subscribers.get(type) || []) {
       handler(event);

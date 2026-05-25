@@ -4,6 +4,11 @@ import { runWithBackendFault } from "@mf/fault-toggles";
 export function mount(container: HTMLElement, shellApi: any) {
   const { context, eventBus } = shellApi;
   const createdTitles: string[] = [];
+  let nextTaskNumber = 1;
+
+  function defaultTaskTitle() {
+    return `Task ${nextTaskNumber}`;
+  }
 
   function render(lastCreatedLabel: string) {
     const canCreate = context.workspace === "ADMIN" && context.permissions?.canCreateTask;
@@ -13,7 +18,7 @@ export function mount(container: HTMLElement, shellApi: any) {
         <p data-testid="creator-workspace">Workspace: ${context.workspace}</p>
         <p>Create tasks in Team A remote. Shell will broker summary updates to Team B remote.</p>
         <p>
-          <input aria-label="Task title" id="task-title-input" placeholder="Write a task title" />
+          <input aria-label="Task title" id="task-title-input" value="${defaultTaskTitle()}" />
           <button id="create-task-btn" type="button">Create Task</button>
         </p>
         <p data-testid="creator-last-task">Last created: ${lastCreatedLabel || "none yet"}</p>
@@ -36,6 +41,7 @@ export function mount(container: HTMLElement, shellApi: any) {
         try {
           const created = await runWithBackendFault("tools", () => ({ title }));
           createdTitles.push(created.title);
+          nextTaskNumber += 1;
           eventBus.publish(EVENT_TYPES.TASK_CREATED, { title: created.title }, "task-creator-remote");
           render(created.title);
         } catch (error: any) {

@@ -41,8 +41,18 @@ describe("module contracts", () => {
   });
 
   it("rejects incomplete task stats payload", () => {
-    const result = validateEventPayload(EVENT_TYPES.TASK_STATS_UPDATED, { total: 1, open: 1 });
+    const result = validateEventPayload(EVENT_TYPES.TASK_STATS_UPDATED, { total: 1, open: 1, done: 0 });
     expect(result.valid).toBe(false);
+  });
+
+  it("accepts valid task stats payload with brokered tasks", () => {
+    const result = validateEventPayload(EVENT_TYPES.TASK_STATS_UPDATED, {
+      total: 1,
+      open: 1,
+      done: 0,
+      tasks: [{ title: "Plan sprint", status: "created" }],
+    });
+    expect(result.valid).toBe(true);
   });
 
   it("rejects unsupported event type", () => {
@@ -58,9 +68,19 @@ describe("module contracts", () => {
     bus.subscribe(EVENT_TYPES.TASK_STATS_UPDATED, (event) => {
       payload = String(event.payload.total);
     });
-    bus.publish(EVENT_TYPES.TASK_STATS_UPDATED, { total: 1, open: 1, done: 0 }, "test");
+    bus.publish(EVENT_TYPES.TASK_STATS_UPDATED, { total: 1, open: 1, done: 0, tasks: [] }, "test");
 
     expect(seen).toEqual([EVENT_TYPES.TASK_STATS_UPDATED]);
     expect(payload).toBe("1");
+  });
+
+  it("records rejected publishes in telemetry before throwing", () => {
+    const telemetry: any[] = [];
+    const bus = createEventBus((event) => telemetry.push(event));
+
+    expect(() => bus.publish(EVENT_TYPES.TASK_CREATED, { title: "" }, "test")).toThrow();
+    expect(telemetry).toHaveLength(1);
+    expect(telemetry[0].status).toBe("rejected");
+    expect(telemetry[0].error).toContain("title");
   });
 });
